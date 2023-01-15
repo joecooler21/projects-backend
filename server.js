@@ -1,18 +1,23 @@
 const dotenv = require('dotenv').config({ path: __dirname + '/.env' })
 const cors = require('cors')
 const express = require('express')
+const nodemailer = require('nodemailer')
 const router = express.Router()
 const bodyParser = require('body-parser')
 const app = express()
 const port = 4000
 const USER = process.env.USERNAME
 const PASS = process.env.PASSWORD
+const EMAIL = process.env.EMAIL
+const EMAIL_PW = process.env.EMAIL_PW
 const mongoose = require('mongoose')
 const Schedule = require('.//schema/Schedule')
 const Shifts = require('.//schema/Shifts')
 const Employees = require('.//schema/Employees')
 const { ObjectId } = require('mongodb')
 const uri = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/?retryWrites=true&w=majority`
+
+
 
 app.use(cors())
 app.use(express.json())
@@ -22,6 +27,40 @@ app.use('/', router)
 
 app.listen(port, () => {
   console.log(`Server initialized on port ${port}`)
+})
+
+app.post('/contact', (req, res) => {
+  const name = req.body.name
+  const email = req.body.email
+  const message = req.body.message
+
+  var transporter = nodemailer.createTransport({
+      service: 'MSN',
+      host: 'smtp-mail.outlook.com',
+      port: '587',
+      secure: false,
+      auth: {
+        user: EMAIL,
+        pass: EMAIL_PW
+      }
+    });
+
+    var mailOptions = {
+      from: email,
+      to: 'joe_cooler@msn.com',
+      subject: `A message from ${name}`,
+      text: message
+    }
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Email sent: ' + info.response);
+      }
+    });
+
+
 })
 
 mongoose.connect(uri, () => {
