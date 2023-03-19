@@ -128,13 +128,6 @@ router.get('/projects/:id', async(req, res) => {
     res.send({})
     return
   }
-  res.send({id:response._id, title:response.title, open:response.open, closed:response.closed})
-
-  // response.forEach((e) => {
-  //   data.push({id:e._id, title:e.title, open:e.open, closed:e.closed})
-  // })
-
-  // res.send(data)
   
 
 })
