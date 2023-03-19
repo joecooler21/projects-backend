@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const db = mongoose.connection.useDb('test')
-const collection = db.model('employees', employeesSchema)
+
 
 
 const employeesSchema = new mongoose.Schema({
@@ -8,7 +8,9 @@ const employeesSchema = new mongoose.Schema({
         firstName: String,
         lastName: String,
 
-}, {collection:'employees'})
+})
+
+const collection = db.model('employees', employeesSchema)
 
 module.exports = { collection }
 
