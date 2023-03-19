@@ -15,7 +15,8 @@ const Schedule = require('.//schema/Schedule')
 const Shifts = require('.//schema/Shifts')
 const Employees = require('.//schema/Employees')
 const { ObjectId } = require('mongodb')
-const uri = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/test?retryWrites=true&w=majority`
+const db1 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/test?retryWrites=true&w=majority`
+const db2 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/bugtracker?retryWrites=true&w=majority`
 
 
 
@@ -69,8 +70,8 @@ router.post('/contact', (req, res) => {
 
 })
 
-mongoose.connect(uri, () => {
-  console.log('db connected')
+mongoose.connect(db1, () => {
+  console.log('db1 connected')
 }, err => {
   console.log(err)
 });
