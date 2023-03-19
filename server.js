@@ -43,30 +43,30 @@ router.post('/contact', (req, res) => {
   const message = req.body.message
 
   var transporter = nodemailer.createTransport({
-      service: 'MSN',
-      host: 'smtp-mail.outlook.com',
-      port: '587',
-      secure: false,
-      auth: {
-        user: EMAIL,
-        pass: EMAIL_PW
-      }
-    });
-
-    var mailOptions = {
-      from: email,
-      to: 'joe_cooler@msn.com',
-      subject: `A message from ${name}`,
-      text: message
+    service: 'MSN',
+    host: 'smtp-mail.outlook.com',
+    port: '587',
+    secure: false,
+    auth: {
+      user: EMAIL,
+      pass: EMAIL_PW
     }
+  });
 
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Email sent: ' + info.response);
-      }
-    });
+  var mailOptions = {
+    from: email,
+    to: 'joe_cooler@msn.com',
+    subject: `A message from ${name}`,
+    text: message
+  }
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
 
 
 })
@@ -81,24 +81,24 @@ const bugDb = mongoose.createConnection(db2, () => {
   console.log('db2 connected')
 }, err => { console.log(err) })
 
-const projectsSchema =  {
+const projectsSchema = {
   id: String,
   title: String,
   info: String,
-  closed:[{
-    id:String,
-    title:String,
-    body:String,
-    author:String,
+  closed: [{
+    id: String,
+    title: String,
+    body: String,
+    author: String,
   }],
-  open:[{
+  open: [{
     id: String,
     title: String,
     comment: String,
-    comments:[{
-      id:String,
-      body:String,
-      author:String,
+    comments: [{
+      id: String,
+      body: String,
+      author: String,
     }]
   }]
 }
@@ -106,12 +106,16 @@ const projectsSchema =  {
 const Projects = bugDb.model('projects', projectsSchema)
 
 router.get('/projects/', async (req, res) => {
+  const data = []
   const response = await Projects.find({})
   if (!response) {
     res.send({})
     return
   }
-  res.send(response)
+  response.forEach(e => {
+    data.push({ id: e.id, title: e.title, info: e.info })
+  })
+  res.send(data)
 })
 
 
@@ -138,20 +142,20 @@ router.get('/week/:range', async (req, res) => {
   const data = []
   const range = req.params.range.split(',')
 
-  const response = await Schedule.find({ date : { $in : range }})
+  const response = await Schedule.find({ date: { $in: range } })
 
   res.send(response)
   console.log(response)
 
 })
 
-  
+
 
 // clear entire schedule for selected day
 router.delete('/clearschedule/:date', async (req, res) => {
   const { date } = req.params
-  const response = await Schedule.deleteOne({ date:date })
-  response.acknowledged ? res.send({message:'OK'}) : res.send({message:'FAILED'})
+  const response = await Schedule.deleteOne({ date: date })
+  response.acknowledged ? res.send({ message: 'OK' }) : res.send({ message: 'FAILED' })
 })
 
 // update or add schedule entry
@@ -163,13 +167,17 @@ router.post('/schedule', async (req, res) => {
     const startShift = req.body.shift.split(' - ')[0]
     const endShift = req.body.shift.split(' - ')[1]
     const date = req.body.date
-    const data = await Schedule.findOneAndUpdate({ date: date }, {$push:{shifts:{
-      firstName:firstName,
-      lastName:lastName,
-      startShift:startShift,
-      endShift:endShift
+    const data = await Schedule.findOneAndUpdate({ date: date }, {
+      $push: {
+        shifts: {
+          firstName: firstName,
+          lastName: lastName,
+          startShift: startShift,
+          endShift: endShift
 
-    }}}, {upsert:true, new:true})
+        }
+      }
+    }, { upsert: true, new: true })
     res.send(data)
     return
   }
@@ -191,7 +199,7 @@ router.post('/schedule', async (req, res) => {
   }
 })
 
-router.post('/fill', async(req, res) => {
+router.post('/fill', async (req, res) => {
   const dates = req.body.dates
   // find all schedules in current month and delete
 })
