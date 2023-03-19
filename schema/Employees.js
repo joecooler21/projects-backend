@@ -8,6 +8,6 @@ const employeesSchema = new mongoose.Schema({
 }, {collection:'employees'} );
 
 // Define model
-const Employee = mongoose.model('employees', employeesSchema);
+const Employee = mongoose.model('Employees', employeesSchema);
 
 module.exports = Employee;
