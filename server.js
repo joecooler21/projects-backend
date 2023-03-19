@@ -72,6 +72,8 @@ router.post('/contact', (req, res) => {
 
 const dbs = [db1, db2]
 
+app.use(cors())
+
 dbs.map((db) => {
   mongoose.createConnection(db, () => {
     console.log('db connection established')
