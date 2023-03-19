@@ -71,24 +71,17 @@ router.post('/contact', (req, res) => {
 
 })
 
-const dbs = [db1, db2]
+mongoose.createConnection(db1, () => {
+  console.log('db1 connected')
+}, err => {
+  console.log(err)
+});
 
-dbs.map((db) => {
-  mongoose.createConnection(db, () => {
-    console.log('db connection established')
-  }, err => {
-    console.log(err)
-  });
-
-})
-
-
-
-// mongoose.createConnection(db2, () => {
-//   console.log('db2 connected')
-// }, err => {
-//   console.log(err)
-// });
+mongoose.createConnection(db2, () => {
+  console.log('db2 connected')
+}, err => {
+  console.log(err)
+});
 
 // return schedule based on calendar click, also send back the id so we can update upon deletion
 
