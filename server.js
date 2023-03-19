@@ -77,6 +77,11 @@ mongoose.connect(db1, () => {
   console.log(err)
 });
 
+const con2 = mongoose.createConnection(db2, () => {
+  console.log('db2 connected')
+}, err => { console.log(err) })
+
+
 // return schedule based on calendar click, also send back the id so we can update upon deletion
 
 router.get('/schedule/:date', async (req, res) => {
