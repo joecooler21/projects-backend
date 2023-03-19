@@ -129,18 +129,22 @@ router.get('/projects/:id', async(req, res) => {
     return
   }
 
-  router.post('/comment/:id', async(req, res) => {
-    const { id } = req.params
-    res.send({received:req.body})
-  })
-
   response.forEach((e) => {
     data.push({id:e._id, title:e.title, open:e.open, closed:e.closed})
   })
 
   res.send(data)
   
+})
 
+// append a comment based on project id
+router.post('/comment/:id', async(req, res) => {
+  const { id } = req.params
+  const comment = req.body.comment
+  Projects.updateOne({_id:ObjectId(id)}, {$push:{comments:comment}}, (err, res) => {
+    if (err) throw err
+    res.send({message:'OK'})
+  })
 })
 
 
