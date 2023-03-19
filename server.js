@@ -77,9 +77,42 @@ mongoose.connect(db1, () => {
   console.log(err)
 });
 
-const con2 = mongoose.createConnection(db2, () => {
+const bugDb = mongoose.createConnection(db2, () => {
   console.log('db2 connected')
 }, err => { console.log(err) })
+
+const projectsSchema =  {
+  id: String,
+  title: String,
+  info: String,
+  closed:[{
+    id:String,
+    title:String,
+    body:String,
+    author:String,
+  }],
+  open:[{
+    id: String,
+    title: String,
+    comment: String,
+    comments:[{
+      id:String,
+      body:String,
+      author:String,
+    }]
+  }]
+}
+
+const Projects = bugDb.model('projects', projectsSchema)
+
+router.get('/projects/', async (req, res) => {
+  const response = await Projects.find({})
+  if (!response) {
+    res.send({})
+    return
+  }
+  res.send(response)
+})
 
 
 // return schedule based on calendar click, also send back the id so we can update upon deletion
