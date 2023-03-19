@@ -1,17 +1,13 @@
-const mongoose = require('mongoose')
-const db = mongoose.connection.useDb('test')
+const mongoose = require('mongoose');
 
-
-
+// Define schema
 const employeesSchema = new mongoose.Schema({
-        id: String,
-        firstName: String,
-        lastName: String,
+  id: String,
+  firstName: String,
+  lastName: String,
+});
 
-})
+// Define model
+const Employee = mongoose.model('employees', employeesSchema);
 
-const collection = db.model('employees', employeesSchema)
-
-module.exports = { collection }
-
-// module.exports = mongoose.model('Employees', employeesSchema)
+module.exports = Employee;

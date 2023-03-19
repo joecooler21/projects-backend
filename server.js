@@ -15,7 +15,7 @@ const Schedule = require('.//schema/Schedule')
 const Shifts = require('.//schema/Shifts')
 const Employees = require('.//schema/Employees')
 const { ObjectId } = require('mongodb')
-const db1 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net?retryWrites=true&w=majority`
+const db1 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/test?retryWrites=true&w=majority`
 const db2 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/bugtracker?retryWrites=true&w=majority`
 
 
@@ -70,11 +70,24 @@ router.post('/contact', (req, res) => {
 
 })
 
-mongoose.connect(db1, () => {
-  console.log('db1 connected')
-}, err => {
-  console.log(err)
-});
+const dbs = [db1, db2]
+
+dbs.map((db) => {
+  mongoose.createConnection(db, () => {
+    console.log('db connection established')
+  }, err => {
+    console.log(err)
+  });
+
+})
+
+
+
+// mongoose.createConnection(db2, () => {
+//   console.log('db2 connected')
+// }, err => {
+//   console.log(err)
+// });
 
 // return schedule based on calendar click, also send back the id so we can update upon deletion
 
