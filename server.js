@@ -105,6 +105,7 @@ const projectsSchema = {
 
 const Projects = bugDb.model('projects', projectsSchema)
 
+// retrieve all projects
 router.get('/projects/', async (req, res) => {
   const data = []
   const response = await Projects.find({})
@@ -116,6 +117,24 @@ router.get('/projects/', async (req, res) => {
     data.push({ id: e._id, title: e.title, info: e.info, open:e.open, closed:e.closed })
   })
   res.send(data)
+})
+
+// retrieve projects based on id
+router.get('/projects/:id', async(req, res) => {
+  const data = []
+  const { id } = req.params
+  const response = await Projects.find({_id:ObjectId(id)})
+  if (!response) {
+    res.send({})
+    return
+  }
+  response.forEach((e) => {
+    data.push({id:e._id, title:e.title, open:e.open, closed:e.closed})
+  })
+
+  res.send(data)
+  
+
 })
 
 
