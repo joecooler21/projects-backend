@@ -113,7 +113,7 @@ router.get('/projects/', async (req, res) => {
     return
   }
   response.forEach(e => {
-    data.push({ id: e.id, title: e.title, info: e.info, open:e.open, closed:e.closed })
+    data.push({ id: e._id, title: e.title, info: e.info, open:e.open, closed:e.closed })
   })
   res.send(data)
 })
