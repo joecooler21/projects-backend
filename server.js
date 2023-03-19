@@ -71,14 +71,8 @@ router.post('/contact', (req, res) => {
 
 })
 
-mongoose.createConnection(db1, () => {
+mongoose.connect(db1, () => {
   console.log('db1 connected')
-}, err => {
-  console.log(err)
-});
-
-mongoose.createConnection(db2, () => {
-  console.log('db2 connected')
 }, err => {
   console.log(err)
 });
