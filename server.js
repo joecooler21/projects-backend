@@ -119,7 +119,7 @@ router.get('/projects/', async (req, res) => {
   res.send(data)
 })
 
-// retrieve projects based on id
+// retrieve project based on id
 router.get('/projects/:id', async(req, res) => {
   const data = []
   const { id } = req.params
@@ -128,11 +128,13 @@ router.get('/projects/:id', async(req, res) => {
     res.send({})
     return
   }
-  response.forEach((e) => {
-    data.push({id:e._id, title:e.title, open:e.open, closed:e.closed})
-  })
+  res.send({id:response._id, title:response.title, open:response.open, closed:response.closed})
 
-  res.send(data)
+  // response.forEach((e) => {
+  //   data.push({id:e._id, title:e.title, open:e.open, closed:e.closed})
+  // })
+
+  // res.send(data)
   
 
 })
