@@ -5,7 +5,7 @@ const employeesSchema = new mongoose.Schema({
   id: String,
   firstName: String,
   lastName: String,
-});
+}, {collection:'employees'} );
 
 // Define model
 const Employee = mongoose.model('employees', employeesSchema);
