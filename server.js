@@ -33,6 +33,8 @@ app.use(function (req, res, next) {
   next();
 })
 
+app.options('*', cors())
+
 app.listen(port, () => {
   console.log(`Server initialized on port ${port}`)
 })
