@@ -143,11 +143,8 @@ router.get('/projects/:id', async(req, res) => {
 router.post('/comment/:id', async(req, res) => {
   const { id } = req.params
   const comment = req.body.comment
-  res.send({id:id, comment:comment})
-  // Projects.updateOne({_id:ObjectId(id)}, {$push:{'open.comments.$[].comments':{body:comment, author:'Joe'}}}, (err, res) => {
-  //   if (err) throw err
-  //   res.send({message:'OK'})
-  // })
+  const response = await Projects.find(ObjectId(id))
+  res.send(response)
 })
 
 
