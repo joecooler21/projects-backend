@@ -141,7 +141,7 @@ router.get('/projects/:id', async(req, res) => {
 router.post('/comment/:id', async(req, res) => {
   const { id } = req.params
   const comment = req.body.comment
-  Projects.updateOne({_id:ObjectId(id)}, {$push:{comments:comment}}, (err, res) => {
+  Projects.updateOne({_id:ObjectId(id)}, {$push:{'open.comments':comment}}, (err, res) => {
     if (err) throw err
     res.send({message:'OK'})
   })
