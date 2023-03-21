@@ -16,7 +16,6 @@ const Shifts = require('.//schema/Shifts')
 const Employees = require('.//schema/Employees')
 const { ObjectId } = require('mongodb')
 const db1 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/test?retryWrites=true&w=majority`
-const db2 = `mongodb+srv://${USER}:${PASS}@cluster0.a9s39hw.mongodb.net/bugtracker?retryWrites=true&w=majority`
 
 
 
@@ -78,77 +77,6 @@ mongoose.connect(db1, () => {
 }, err => {
   console.log(err)
 });
-
-const bugDb = mongoose.createConnection(db2, () => {
-  console.log('db2 connected')
-}, err => { console.log(err) })
-
-const projectsSchema = {
-  id: String,
-  title: String,
-  info: String,
-  closed: [{
-    id: String,
-    title: String,
-    body: String,
-    author: String,
-  }],
-  open: [{
-    id: String,
-    title: String,
-    comment: String,
-    comments: [{
-      id: String,
-      body: String,
-      author: String,
-    }]
-  }]
-}
-
-const Projects = bugDb.model('projects', projectsSchema)
-
-// retrieve all projects
-router.get('/projects/', async (req, res) => {
-  const data = []
-  const response = await Projects.find({})
-  if (!response) {
-    res.send({})
-    return
-  }
-  response.forEach(e => {
-    data.push({ id: e._id, title: e.title, info: e.info, open:e.open, closed:e.closed })
-  })
-  res.send(data)
-})
-
-// retrieve project based on id
-router.get('/projects/:id', async(req, res) => {
-  const data = []
-  const { id } = req.params
-  const response = await Projects.find({_id:ObjectId(id)})
-  if (!response) {
-    res.send({})
-    return
-  }
-
-  response.forEach((e) => {
-    data.push({id:e._id, title:e.title, open:e.open, closed:e.closed})
-  })
-
-  res.send(data)
-  
-})
-
-// append a comment based on project id
-router.post('/comment/:id', async(req, res) => {
-  const { id } = req.params
-  const comment = req.body.comment
-  const response = await Projects.updateOne({_id:ObjectId(id)},
-  {$push:{'open.$[].comments':{body:comment, author:'Joe'}}})
-  const updated_comments = await Projects.find({_id:ObjectId(id)}, {'open.comments':1})
-  res.send(updated_comments[0].open[0].comments)
-})
-
 
 // return schedule based on calendar click, also send back the id so we can update upon deletion
 
